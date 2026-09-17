@@ -74,7 +74,7 @@ All shared understanding entries are scoped to the active project. Decisions mad
 Use `memory_facet_tag` to annotate entries as decisions are made:
 
 - **`collaboration-state:decided`** — A point the user confirmed or approved. "Yes", "b, please", "that's right", explicit agreement. Not every statement — only confirmed conclusions.
-- **`collaboration-state:approved`** — Text that is finalized. Posted to Slack, written to a canonical document, or explicitly approved by the user. Approved text is reproduced verbatim.
+- **`collaboration-state:approved`** — Text that is finalized. Posted to Slack, written to a canonical document, or explicitly approved by the user. Tag with a reference to where the text lives (file path, Slack link, or conversation location). Do not duplicate the full text in the memory system — read it from the source when reproducing it.
 - **`collaboration-state:superseded`** — A prior decision or statement replaced by a later one. Do not delete — tag and link to the replacement. The reasoning chain matters for revisiting decisions.
 - **`collaboration-state:open-question`** — Something explicitly identified as unresolved. Distinct from "we haven't discussed it."
 - **`collaboration-state:approved-outline`** — An approved document outline. Governs the structure of subsequent writing. When active, the `shared-understanding` slot should carry it so it survives compaction and is visible in continuation sessions. If scope changes during writing, the outline must be revisited and re-approved before continuing.
