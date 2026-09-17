@@ -1,8 +1,3 @@
----
-name: working-style
-description: User working style, modalities, collaboration preferences, and shared understanding maintenance. Shapes agent behavior across conversation, research, writing, and implementation modes. Manages decision tagging via kilocode-agent-memory journal and memory blocks.
----
-
 # Working Style
 
 This skill encodes how the user works with AI agents. It applies to every session regardless of project or task.
