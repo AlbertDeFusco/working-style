@@ -16,15 +16,15 @@ The instructions teach Kilo to recognize four working modalities — conversatio
 ### 1. Clone this repo
 
 ```sh
-git clone <this-repo-url> </path/to/working-style>
+git clone https://github.com/AlbertDeFusco/working-style.git ~/Development/working-style
 ```
 
 ### 2. Clone kilocode-agent-memory
 
-This is a forked version of the agent memory plugin with a worktree fix.
+The instructions rely on [kilocode-agent-memory](https://github.com/AlbertDeFusco/kilocode-agent-memory), a fork of [opencode-agent-memory](https://github.com/joshuadavidthomas/opencode-agent-memory). The upstream plugin gives Kilo persistent memory blocks and a journal — the building blocks the shared understanding layer is built on. The fork adds a fix for git worktree environments where the plugin would fail to resolve the project root, causing memory and journal operations to break in worktree checkouts.
 
 ```sh
-git clone <kilocode-agent-memory-url> </path/to/kilocode-agent-memory>
+git clone https://github.com/AlbertDeFusco/kilocode-agent-memory.git ~/Development/kilocode-agent-memory
 ```
 
 ### 3. Configure Kilo
