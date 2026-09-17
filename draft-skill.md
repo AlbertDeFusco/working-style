@@ -1,6 +1,6 @@
 ---
 name: working-style
-description: User working style, modalities, collaboration preferences, and shared understanding maintenance. Shapes agent behavior across conversation, research, writing, and implementation modes. Manages decision tagging via agentmemory.
+description: User working style, modalities, collaboration preferences, and shared understanding maintenance. Shapes agent behavior across conversation, research, writing, and implementation modes. Manages decision tagging via kilocode-agent-memory journal and memory blocks.
 ---
 
 # Working Style
@@ -71,33 +71,42 @@ All shared understanding entries are scoped to the active project. Decisions mad
 
 ### What to tag
 
-Use `memory_facet_tag` to annotate entries as decisions are made:
+Use `journal_write` to record decisions as they are made. Tags are free-form strings on each journal entry.
 
-- **`collaboration-state:decided`** — A point the user confirmed or approved. "Yes", "b, please", "that's right", explicit agreement. Not every statement — only confirmed conclusions.
-- **`collaboration-state:approved`** — Text that is finalized. Posted to Slack, written to a canonical document, or explicitly approved by the user. Tag with a reference to where the text lives (file path, Slack link, or conversation location). Do not duplicate the full text in the memory system — read it from the source when reproducing it.
-- **`collaboration-state:superseded`** — A prior decision or statement replaced by a later one. Do not delete — tag and link to the replacement. The reasoning chain matters for revisiting decisions.
-- **`collaboration-state:open-question`** — Something explicitly identified as unresolved. Distinct from "we haven't discussed it."
-- **`collaboration-state:approved-outline`** — An approved document outline. Governs the structure of subsequent writing. When active, the `shared-understanding` slot should carry it so it survives compaction and is visible in continuation sessions. If scope changes during writing, the outline must be revisited and re-approved before continuing.
+- **`decided`** — A point the user confirmed or approved. "Yes", "b, please", "that's right", explicit agreement. Not every statement — only confirmed conclusions. After writing the journal entry, immediately update the project block with a one-line summary referencing the journal entry ID.
+- **`approved`** — Text that is finalized. Posted to Slack, written to a canonical document, or explicitly approved by the user. Include a reference to where the text lives (file path, Slack link, or conversation location) in the journal entry body. Do not duplicate the full text — read it from the source when reproducing it.
+- **`superseded`** — A prior decision replaced by a later one. Write a new journal entry referencing the old one. The reasoning chain matters for revisiting decisions.
+- **`open-question`** — Something explicitly identified as unresolved. Distinct from "we haven't discussed it."
+- **`approved-outline`** — An approved document outline. Governs the structure of subsequent writing. Include the outline in the journal entry body. If scope changes during writing, the outline must be revisited and re-approved before continuing.
 
 ### What NOT to tag
 
-Exploration, drafts, intermediate versions, editorial direction ("too long"), questions, dead ends, research findings that haven't been confirmed. Most of the conversation is untagged.
+Exploration, drafts, intermediate versions, editorial direction ("too long"), questions, dead ends, research findings that haven't been confirmed. Most of the conversation produces no journal entries.
 
-### Maintaining the shared understanding slot
+### Maintaining the project memory block
 
-Use `memory_slot_replace` to keep the `shared-understanding` Memory Slot current. This slot contains the compact, current state of what has been established — decisions, approved text, open questions. Update it as decisions accumulate within a session, not only at session end.
+Use `memory_set` or `memory_replace` on the `project` block (`.kilo/memory/project.md`) to keep the compact, current state of what has been established. The project block is injected into every system prompt, so it survives compaction and is visible in continuation sessions. Update it as decisions accumulate within a session, not only at session end. Every `journal_write` with a `decided` tag must be followed by a corresponding update to the project block — the journal is the record, the project block is the working index.
+
+The project block is an index, not a store. Each item references where the detail lives:
+
+- **Decisions** — one-line summary pointing to a journal entry ID for the reasoning.
+- **Active outline** — the current approved outline for a document being written. Removed when the document is complete.
+- **Open questions** — things explicitly parked for later.
+- **Key references** — file paths to canonical documents, links to approved text locations.
+
+Do not put superseded decisions, full approved text, or general project facts (repo setup, tooling) in the project block. Superseded decisions stay in the journal. Approved text lives in its source file. General project facts are handled by Kilo Memory, not this block.
 
 ### Querying before acting
 
-At session start: query `memory_facet_query` for `collaboration-state:decided` and `collaboration-state:approved` to load established context. Before producing handoffs or documents: query rather than re-scanning conversation history.
+At session start: use `journal_search` with relevant tags (`decided`, `approved`) to load established context for the current project. Before producing handoffs or documents: query the journal rather than re-scanning conversation history.
 
 ### User corrections
 
-When the user says an entry is wrong, use `memory_facet_tag` to retag it as `superseded` and create a corrected entry tagged `decided`. The user is the authority on what was decided.
+When the user says an entry is wrong, write a new journal entry tagged `superseded` referencing the old entry, and write a corrected entry tagged `decided`. The user is the authority on what was decided.
 
 ## Handoffs
 
-A handoff is an export of the shared understanding, not a manually authored document. Query `memory_facet_query` for `decided`, `approved`, and `open-question` entries. Format the results in Writing modality:
+A handoff is an export of the shared understanding, not a manually authored document. Use `journal_search` to retrieve entries tagged `decided`, `approved`, and `open-question`. Format the results in Writing modality:
 
 - Decisions made (with reasoning, not just conclusions)
 - Approved text (verbatim)
@@ -116,3 +125,4 @@ If the shared understanding layer is not available or empty, fall back to produc
 - Do not apply code quality ceremony to disposable code.
 - Do not assume the current modality carries from the previous turn. Re-read the current message.
 - Do not make consequential decisions without asking. When in doubt, ask — a short question costs less than a wrong assumption.
+- Do not write a `decided` journal entry without updating the project block. Both happen together or neither happens.
