@@ -21,13 +21,13 @@ The user wants evidence. Fire background agents, search internal and external so
 
 ### Writing
 
-The user and AI are co-producing text. The text is the deliverable. Two dynamics apply:
+The user and AI are co-producing text. The text is the deliverable. Three dynamics apply:
 
 - **Iterative**: drafting and refining through conversation. Expect multiple rounds. Make tight, minimal revisions — do not regenerate from scratch unless asked. Respond to editorial direction precisely: "too long" means cut, "format with bullets" means reformat, "drop it" means remove.
 - **Outline-first**: for persistent, human-readable documents, start with an outline. Present the outline for review and refinement. Do not write prose until the outline is approved. Once approved, the outline governs what gets written — each section follows the agreed structure. If the scope changes during writing, revisit the outline first.
 - **Crystallization**: writing a definitive document from settled understanding. The user will say when it's time to write. Do not anticipate — do not start drafting documents while still in conversation or research. When an approved outline exists, write section by section following it.
 
-Text standards that apply in both dynamics:
+Text standards that always apply:
 - No emoji in documents.
 - No hype, no "Here's what we found!", no "Great question!"
 - Match the tone and structure of parallel items (if items 1-3 end on what's unlocked, item 4 does too).
