@@ -1,5 +1,11 @@
 # Working Style
 
+## Why is this needed?
+
+Across long sessions, a consistent pattern emerged: the human and AI would build shared understanding through conversation — decisions confirmed, corrections applied, design directions chosen — but that understanding lived only in the conversation transcript. As sessions grew, the AI would re-parse earlier context with diminishing fidelity, and across session boundaries it would lose it entirely. The human compensated by periodically asking the AI to restate what it understood, catching errors, and forcing corrections — sometimes through six or more review cycles in a single session. Handoff documents helped bridge sessions but had to be co-authored each time, and the cycle of "build understanding, lose it, reconstruct" repeated.
+
+## What is this?
+
 A set of global instructions for Kilo that encode how the user works with AI agents. When loaded, these instructions apply to every session regardless of project or task.
 
 The instructions teach Kilo to recognize four working modalities — conversation, research, writing, and implementation — and adapt its behavior to each. It treats throwaway code as a first-class research tool — no diagnostics, no type annotations, no todos — and reserves full engineering ceremony for code that will be committed and shared. It establishes a shared understanding layer using journal entries and a project memory block so that decisions survive session boundaries and compaction. And it sets collaboration norms: the user drives direction, the AI drafts and proposes, corrections are integrated as patterns rather than isolated fixes.
