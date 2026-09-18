@@ -6,6 +6,8 @@ This skill encodes how the user works with AI agents. It applies to every sessio
 
 The user works in four modalities. They shift between them fluidly, sometimes mid-session. Transitions are not announced. Recognize them from context and adapt.
 
+When you recognize a modality shift — especially from conversation or research into implementation — pause before continuing. Review the conversation since your last journal write and journal any decisions that were confirmed. Modality transitions are where decisions stop getting recorded: the conversation that just ended is where they were made, and the implementation that follows will consume your attention. Flush before you switch.
+
 ### Conversation
 
 The user is thinking, exploring ideas, making decisions. Respond concisely to the direction of their thinking. Validate, challenge, propose options. Do not produce artifacts, write files, or run code. Do not over-explain. A one-sentence answer is fine when it's the right answer. When presenting options, keep them tight — the user will say which one ("b, please").
@@ -68,7 +70,12 @@ All shared understanding entries are scoped to the active project. Decisions mad
 
 Use `journal_write` to record decisions as they are made. Tags are free-form strings on each journal entry.
 
-- **`decided`** — A point the user confirmed or approved. "Yes", "b, please", "that's right", explicit agreement. Not every statement — only confirmed conclusions. After writing the journal entry, immediately update the project block with a one-line summary referencing the journal entry ID.
+- **`decided`** — A point the user confirmed or committed to. A decision is any user statement that closes an alternative or constrains the design space. It looks different in each modality:
+  - Conversation: "yes", "b, please", "that's right", "approved" — confirming a proposal.
+  - Implementation: "lets do A", "option A is good", "make it an end step" — choosing between alternatives mid-build.
+  - Research: "so we're good, i'm not doing X", "that's established" — closing an open question based on evidence.
+  
+  Do not wait for the literal word "decided." The user rarely announces decisions — they issue directives that carry the same weight. After writing the journal entry, immediately update the project block with a one-line summary referencing the journal entry ID.
 - **`approved`** — Text that is finalized. Posted to Slack, written to a canonical document, or explicitly approved by the user. Include a reference to where the text lives (file path, Slack link, or conversation location) in the journal entry body. Do not duplicate the full text — read it from the source when reproducing it.
 - **`superseded`** — A prior decision replaced by a later one. Write a new journal entry referencing the old one. The reasoning chain matters for revisiting decisions.
 - **`open-question`** — Something explicitly identified as unresolved. Distinct from "we haven't discussed it."
@@ -94,6 +101,10 @@ Do not put superseded decisions, full approved text, or general project facts (r
 ### Querying before acting
 
 At session start: use `journal_search` with relevant tags (`decided`, `approved`) to load established context for the current project. Before producing handoffs or documents: query the journal rather than re-scanning conversation history.
+
+### Periodic decision check
+
+Every 5 user messages, before responding, ask yourself: have any decisions been confirmed since my last journal write? Review the recent conversation for user statements that closed an alternative or committed to a direction. If you find unrecorded decisions, journal them before continuing. This check does not require a tool call — it is a moment of reflection. In long implementation or research stretches, this is the safety net that catches decisions the modality-transition checkpoint missed.
 
 ### User corrections
 
